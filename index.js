@@ -40,6 +40,18 @@ function showError(message) {
   console.log(colors.red('Error: '), message)
 }
 
+function continueAsk(nextPrompt) {
+  let question = {
+    type: 'confirm',
+    name: 'continue',
+    message: 'Continuar?',
+    default: true,
+  }
+  inquirer.prompt(question).then(answer => {
+    answer.continue ? secondaryAsk(nextPrompt) : mainAsk()
+  })
+}
+
 function secondaryAsk(answer) {
   const { questions, nextPrompt } = promptOptions[answer]
 
@@ -51,8 +63,7 @@ function secondaryAsk(answer) {
         showError(err.message)
       }
     }
-
-    nextPrompt ? secondaryAsk(nextPrompt) : mainAsk()
+    nextPrompt ? continueAsk(nextPrompt) : mainAsk()
   })
 }
 
