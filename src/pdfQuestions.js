@@ -23,11 +23,10 @@ module.exports = {
 
 function downloadPdfs() {
   const spinner = ora('Descargando PDFs').start()
+
   const defer = new Promise((resolve, reject) => {
     setTimeout(() => {
-      console.log('yoooooja1')
-      spinner.text = 'PDFs descargados'
-      spinner.succeed()
+      spinner.succeed('PDFs descargados')
       resolve()
     }, 1000)
   })
@@ -35,10 +34,10 @@ function downloadPdfs() {
 }
 
 function uploadPdfs() {
-  const spinner = ora('Subiendo PDFs a google').start()
+  const spinner = ora('Subiendo PDFs a Google Cloud').start()
+
   const defer = new Promise((resolve, reject) => {
     setTimeout(() => {
-      console.log('yoooooja2')
       spinner.fail('ha petado algo')
       reject(new Error('ha petado algo'))
     }, 1500)

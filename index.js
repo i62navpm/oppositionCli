@@ -1,5 +1,5 @@
 const inquirer = require('inquirer')
-var colors = require('colors')
+const colors = require('colors')
 
 const promptOptions = {
   pdfQuestions: require('./src/pdfQuestions'),
@@ -51,18 +51,13 @@ function secondaryAsk(answer) {
         showError(err.message)
       }
     }
-    if (nextPrompt) {
-      secondaryAsk(nextPrompt)
-    } else {
-      mainAsk()
-    }
+
+    nextPrompt ? secondaryAsk(nextPrompt) : mainAsk()
   })
 }
+
 function mainAsk() {
-  inquirer.prompt(questions).then(answer => {
-    console.log('\nOrder receipt:')
-    secondaryAsk(answer.mainQuestions)
-  })
+  inquirer.prompt(questions).then(answer => secondaryAsk(answer.mainQuestions))
 }
 
 mainAsk()
