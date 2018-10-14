@@ -3,9 +3,7 @@ const fs = require('fs')
 function saveFiles(files, format) {
   let dir = `./${format}s`
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir)
-  }
+  !fs.existsSync(dir) && fs.mkdirSync(dir)
 
   Object.entries(files).forEach(([list, data]) => {
     fs.writeFileSync(`${dir}/${list}.${format}`, data)
@@ -15,9 +13,7 @@ function saveFiles(files, format) {
 function readFiles(format) {
   let dir = `./${format}s`
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir)
-  }
+  !fs.existsSync(dir) && fs.mkdirSync(dir)
 
   return fs.readdirSync(dir).reduce((acc, curr) => {
     const list = curr.split('.')[0]
@@ -26,4 +22,12 @@ function readFiles(format) {
   }, {})
 }
 
-module.exports = { saveFiles, readFiles }
+function readFile(file, format) {
+  let dir = `./${format}s`
+
+  !fs.existsSync(dir) && fs.mkdirSync(dir)
+
+  return fs.readFileSync(`${dir}/${file}.${format}`)
+}
+
+module.exports = { saveFiles, readFiles, readFile }
