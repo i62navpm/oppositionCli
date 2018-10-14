@@ -1,4 +1,6 @@
+const fs = require('fs')
 const ora = require('ora')
+const { downloadResources, uploadResources } = require('check-pdf-script')
 
 module.exports = {
   questions: {
@@ -21,26 +23,53 @@ module.exports = {
   nextPrompt: 'jsonQuestions',
 }
 
-function downloadPdfs() {
+async function downloadPdfs() {
   const spinner = ora('Descargando PDFs').start()
-
-  const defer = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      spinner.succeed('PDFs descargados')
-      resolve()
-    }, 1000)
-  })
-  return defer
+  try {
+    let files = await downloadResources()
+    saveFiles(files)
+    spinner.succeed('PDFs descargados')
+  } catch (err) {
+    spinner.fail(err.message)
+    return err
+  }
 }
 
-function uploadPdfs() {
+async function uploadPdfs() {
   const spinner = ora('Subiendo PDFs a Google Cloud').start()
 
-  const defer = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      spinner.fail('ha petado algo')
-      reject(new Error('ha petado algo'))
-    }, 1500)
+  try {
+    let files = readFiles()
+    await uploadResources(files)
+    spinner.succeed('PDFs subidos a Google Cloud')
+  } catch (err) {
+    spinner.fail(err.message)
+    return err
+  }
+}
+
+function saveFiles(files) {
+  let dir = './pdfs'
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir)
+  }
+
+  Object.entries(files).forEach(([list, data]) => {
+    fs.writeFileSync(`${dir}/${list}.pdf`, data)
   })
-  return defer
+}
+
+function readFiles() {
+  let dir = './pdfs'
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir)
+  }
+
+  return fs.readdirSync(dir).reduce((acc, curr) => {
+    const list = curr.split('.')[0]
+    acc[list] = fs.readFileSync(`${dir}/${curr}`)
+    return acc
+  }, {})
 }
