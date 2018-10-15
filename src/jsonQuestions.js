@@ -41,10 +41,10 @@ async function createJsons() {
 }
 
 async function uploadJsons() {
-  const spinner = ora('Subiendo PDFs a Google Cloud').start()
+  const spinner = ora('Subiendo JSONs a Google Cloud').start()
 
   try {
-    let files = readFiles('pdf')
+    let files = readFiles('json')
     await uploadResourcesJson(files)
     spinner.succeed('JSONs subidos a Google Cloud')
   } catch (err) {
