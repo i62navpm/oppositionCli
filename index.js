@@ -31,7 +31,7 @@ const questions = [
   {
     type: 'list',
     name: 'mainQuestions',
-    message: 'ListandoMe'.america,
+    message: [' PRIMARIA '.bgCyan.black, ' ListandoMe'.america],
     choices,
   },
 ]
